@@ -1,64 +1,58 @@
-# Agrotech
--> Prompt Summary: Smart Farming Advisor
-The Problem:
-Farmers often struggle to optimize crop yield due to:
-Changing weather
-Inefficient use of water & fertilizer
-Late pest detection
-The Solution Goal:
-Create a smart farming assistant that:
-Uses sensor or manual input (soil, temperature, etc.)
-Applies basic AI/logic to recommend actions
-Runs on low-power hardware or offline
-Is easy for farmers to use in real-world rural settings
--> What's in the Code
--> Purpose:
-Simulates a decision-making tool for farmers using:
-Soil moisture
-Temperature
-Soil type
-It analyzes this input and gives actionable advice:
-Should I water?
-Should I fertilize?
-Are pests likely?
--> Code Explanation (Line by Line)
--> Header and Function Declarations
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-Standard libraries: input/output, string handling.
+Problem Statement:
+Farmers face challenges like:
+- Unpredictable environmental conditions
+- Inefficient water/fertilizer use
+- Crop losses due to pests
+Goal:
+Create a smart, offline-capable system using IoT sensors, satellite imagery, and machine learning to give farmers real-time recommendations on:
+- Water usage
+- Fertilizer application
+- Pest control
+  
+✅ Your Project Breakdown
+💡 What You've Built:
+You've created a web-based tool with:
+- A Flask backend (Python)
+- A Frontend UI (HTML + JS)
+- Offline capability (runs on local server, no internet needed)
+  
+📦 Flask Backend Code Explanation:
+Purpose:
+- Handles POST requests from the frontend, analyzes data, and returns recommendations.
+- Input Data (from user or sensors):
+  moisture (soil moisture %)
+- temperature (air/soil temperature °C)
+- soilType (like sandy, clay, loamy)
+Backend Logic:
+Irrigation:
+- If moisture < 30 and temperature > 32 → prompt to water crops.
+Fertilizer:
+- Customized recommendation based on soil type and moisture level.
+Pest Warning:
+- If temperature > 35 → warn about increased pest risk.
+Output:
+Returns a JSON object with:
+- "irrigation" message
+- "fertilizer" suggestion
+- "pestWarning" (if any)
+  
+🖥️ HTML + JavaScript Frontend:
+Purpose:
+Provides an easy-to-use interface for farmers to input conditions and view smart advice.
+Features:
+Input fields: Soil moisture, temperature, soil type
+Button: Triggers logic to show recommendations
+Output section: Displays advice in text format
+Offline Capability:
+Everything runs locally (you can deploy with Flask on a laptop or Raspberry Pi)
+No internet required — great for rural/farm areas
 
--> Main Logic Function: analyze_data_and_recommend(...)
-void analyze_data_and_recommend(float moisture, float temp, char soil_type[20]) {
-Takes 3 parameters: moisture, temperature, soil type.
--> Watering Logic:
-if (moisture < 30 && temp > 32)
-If soil is dry AND it's hot → recommend watering.
--> Fertilizer Logic:
-if (strcmp(soil_type, "sandy") == 0 && moisture > 25 && moisture < 40)
-Soil-specific fertilizer tips: Sandy needs more frequent, clay retains better.
--> Pest Logic:
-if (temp > 35)
-If temp is very high → warn about pest risk (simulated).
--> Main Function: int main()
-float soil_moisture, temperature;
-char soil_type[20];
-Declares variables to take user input.
-scanf("%f", &soil_moisture);
-scanf("%f", &temperature);
-scanf("%s", soil_type);
-Reads user input from console.
-analyze_data_and_recommend(soil_moisture, temperature, soil_type);
-Calls the logic function with user input.
-
-**Example Use Case (For Judges or Demo)
-A farmer enters:
-Soil Moisture: 25%
-Temperature: 37°C
-Soil Type: sandy
-
-* The system replies:
-“Water your crops now.”
-“Apply 60% NPK fertilizer.”
-“High pest risk, watch for insects.”
--> This is simple, fast, useful advice — exactly what farmers need.
+🚀 How This Solves the Prompt
+Feature	Addressed?	How
+📡 Use of sensors/data              	✅	Manual input simulates sensor data (can be automated later)
+🤖 Machine learning (basic logic)   	✅	Rule-based logic now, can evolve into ML models (train on sensor data)
+💧 Water usage optimization	          ✅	Advises watering based on temperature & moisture
+🌿 Fertilizer optimization	          ✅	Tailored by soil type and condition
+🐛 Pest control alerts	              ✅	Warns based on high temperature conditions
+🛠️ Offline support	                  ✅	Works 100% offline (local Flask server + frontend)
+⚡ Low-power device optimization	    ✅	Lightweight UI + Python backend can run on a Pi or low-end laptop
