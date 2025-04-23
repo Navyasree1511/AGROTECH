@@ -1,0 +1,131 @@
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+@app.route('/recommend', methods=['POST'])
+def recommend():
+    data = request.json
+    moisture = float(data['moisture'])
+    temperature = float(data['temperature'])
+    soil_type = data['soilType'].lower()
+
+    response = {
+        "irrigation": "",
+        "fertilizer": "",
+        "pestWarning": ""
+    }
+
+    # Irrigation suggestion
+    if moisture < 30 and temperature > 32:
+        response["irrigation"] = "💧 Water your crops now."
+    else:
+        response["irrigation"] = "✅ Soil moisture is sufficient."
+
+    # Fertilizer advice
+    if soil_type == "sandy" and 25 < moisture < 40:
+        response["fertilizer"] = "🌿 Fertilizer: Use 60% NPK for sandy soil."
+    elif soil_type == "clay" and moisture > 30:
+        response["fertilizer"] = "🌿 Fertilizer: Use 40% NPK every 10 days for clay soil."
+    else:
+        response["fertilizer"] = "🌿 Fertilizer: Apply 50% standard NPK."
+
+    # Pest warning
+    if temperature > 35:
+        response["pestWarning"] = "🐛 Warning: High pest risk! Monitor your crops."
+
+    return jsonify(response)
+
+if __name__ == '__main__':
+    app.run(debug=True)
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AgriSense Recommendation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f4f4f4;
+      border-radius: 10px;
+    }
+    input, select, button {
+      display: block;
+      margin-top: 10px;
+      padding: 8px;
+      width: 100%;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    #output {
+      margin-top: 30px;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h2>📊 AgriSense Recommendation Tool</h2>
+
+  <label for="moisture">📥 Enter Soil Moisture (%)</label>
+  <input type="number" id="moisture" placeholder="e.g. 25">
+
+  <label for="temperature">🌡️ Enter Temperature (°C)</label>
+  <input type="number" id="temperature" placeholder="e.g. 34">
+
+  <label for="soilType">🌱 Select Soil Type</label>
+  <select id="soilType">
+    <option value="sandy">Sandy</option>
+    <option value="clay">Clay</option>
+    <option value="loamy">Loamy</option>
+    <option value="silty">Silty</option>
+  </select>
+
+  <button onclick="generateRecommendation()">Get Recommendation</button>
+
+  <div id="output"></div>
+
+  <script>
+    function generateRecommendation() {
+      const moisture = parseFloat(document.getElementById('moisture').value);
+      const temperature = parseFloat(document.getElementById('temperature').value);
+      const soilType = document.getElementById('soilType').value;
+
+      let output = "<h3>📊 AgriSense Recommendation</h3>";
+
+      // Irrigation suggestion
+      if (moisture < 30 && temperature > 32) {
+        output += "<p>💧 Water your crops now.</p>";
+      } else {
+        output += "<p>✅ Soil moisture is sufficient.</p>";
+      }
+
+      // Fertilizer advice
+      if (soilType === "sandy" && moisture > 25 && moisture < 40) {
+        output += "<p>🌿 Fertilizer: Use 60% NPK for sandy soil.</p>";
+      } else if (soilType === "clay" && moisture > 30) {
+        output += "<p>🌿 Fertilizer: Use 40% NPK every 10 days for clay soil.</p>";
+      } else {
+        output += "<p>🌿 Fertilizer: Apply 50% standard NPK.</p>";
+      }
+
+      // Pest warning
+      if (temperature > 35) {
+        output += "<p>🐛 Warning: High pest risk! Monitor your crops.</p>";
+      }
+
+      output += "<p>🌾 Stay smart, farm better!</p>";
+      document.getElementById('output').innerHTML = output;
+    }
+  </script>
+</body>
+</html>
